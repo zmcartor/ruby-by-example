@@ -24,5 +24,5 @@ func_hash['is_even'] = lambda {|term| (term % 2) == 0}
 func_hash.keys.sort.each do |func|
 	lambda_proc = func_hash[func]
 	lambda_value = digits.matching_members(lambda_proc).join(',')
-	puts "#{func} \t [#{lambda_value}]\n"
+	puts "#{func} [#{lambda_value}]\n"
 end

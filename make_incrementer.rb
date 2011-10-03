@@ -1,4 +1,3 @@
-
 def make_incrementer(delta)
 	#return a 'proc' object. use .call(x) to execute.
 	return lambda {|x| x + delta}
