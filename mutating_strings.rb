@@ -13,7 +13,7 @@ end
 
 class String
 	ALPHABET = ('a'..'z').to_a
-	LETTER_OFFSET = 'a'[0] #this is the numeric value of 'a'. used to determine placement in the ALPHABET array
+	LETTER_OFFSET = 'a'.getbyte(0) #this is the numeric value of 'a'. used to determine placement in the ALPHABET array
 
 	PARAMS = {
 		:generation_size => 20,
@@ -29,7 +29,7 @@ class String
 	def deviance_from(target)
 		deviance = 0;
 		split('').each_index do |index|
-			deviance += (self[index] - target[index]).abs #sum up the differences
+			deviance += (self.getbyte(index) - target.getbyte(index)).abs #sum up the differences
 		end
 		return deviance
 	end
@@ -62,7 +62,7 @@ class String
 	end
 
 	def report_progress(params)
-		return unless (@mutation_attempts % params[:display_filter] =0 )
+		return unless (@mutation_attempts % params[:display_filter] ==0 )
 		puts "string ##{@mutation_attempts} = #{self} "
 	end
 
@@ -85,6 +85,22 @@ class String
 	private
 
 
+	def limit_index(alphabet_index)
+		alphabet_index = [ALPHABET.size-1, alphabet_index].min
+		alphabet_index = [alphabet_index, 0].max
+	end
+
+	def mutate_char(original_char, params)
+		return original_char if rand(100) > params[:mutation_rate]
+
+		#randomizes the selection of a new character from the ALPHABET array. kinda odd.
+		variance = rand(PARAMS[:mutation_map]) - (PARAMS[:mutation_map] / 2)
+		variance +=1 if variance.zero?
+		alphabet_index = (original_char.getbyte(0) + variance - LETTER_OFFSET)
+		alphabet_index = limit_index(alphabet_index)
+		mutated_char = ALPHABET[alphabet_index]
+		return mutated_char
+	end
 
 
 
